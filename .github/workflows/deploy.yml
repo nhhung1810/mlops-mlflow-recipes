@@ -1,0 +1,37 @@
+name: Deploy databricks model to endpoint
+
+on:
+  push:
+    tags:
+      - deploy-*
+
+env:
+  MLFLOW_CONDA_HOME: /usr/share/miniconda
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+      - name: Install dependencies
+        run: |
+          pip install -r ./requirements.txt
+      - name: Install Databricks CLI
+        run: |
+          curl -fsSL "https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh" | sh
+          databricks -v
+      - name: Read file and deploy model name
+        env:
+          endpoint_name: "test-cli-endpoint"
+          model_name: "red_wine_classifier"
+          model_version: "1"
+          databrick_host: ${{ secrets.DBRICK_HOST_NAME }}
+          databrick_token: ${{ secrets.DBRICK_TOKEN }}
+        run: |
+          ./.github/workflows/scripts/deploy-model.sh \
+            "$endpoint_name" "$model_name" "$model_version" \
+            "$databrick_host" "$databrick_token"
+          
