@@ -26,7 +26,7 @@ jobs:
       - name: Read file and deploy model name
         env:
           endpoint_name: "test-cli-endpoint"
-          model_name: "red_wine_classifier"
+          model_name: "taxi_fare_regressor"
           model_version: "1"
           databrick_host: ${{ secrets.DBRICK_HOST_NAME }}
           databrick_token: ${{ secrets.DBRICK_TOKEN }}
