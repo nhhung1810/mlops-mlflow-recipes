@@ -25,6 +25,7 @@ r = Recipe(profile="databricks")
 
 # COMMAND ----------
 
+print("Change")
 r.clean()
 
 # COMMAND ----------
